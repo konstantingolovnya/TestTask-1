@@ -22,12 +22,12 @@ final class DetailModulePresenter: DetailModulePresenterProtocol {
     let transaction: Transaction
     let title: String
     let converter: CurrencyConverterProtocol
-    let formatter: CurrencyFormatter
+    let formatter: CurrencyFormatterProtocol
     let targetCurrency: String
     
     typealias TemporaryTransaction = (originalCurrency: String, originalAmount: Double, targetCurrency: String, targetAmount: Double)
     
-    init(transaction: Transaction, converter: CurrencyConverter, formatter: CurrencyFormatter, targetCurrency: String = "GBP") {
+    init(transaction: Transaction, converter: CurrencyConverterProtocol, formatter: CurrencyFormatterProtocol, targetCurrency: String = "GBP") {
         self.transaction = transaction
         self.title = "Transactions for \(transaction.sku)"
         self.converter = converter

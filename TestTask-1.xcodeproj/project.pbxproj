@@ -235,12 +235,28 @@
 			isa = PBXGroup;
 			children = (
 				B5171CA92CE3333100563C6B /* DetailModuleFactory.swift */,
+				B5E0E43A2CE490610013EB10 /* View */,
+				B5E0E4392CE490580013EB10 /* Presenter */,
+			);
+			path = DetailModule;
+			sourceTree = "<group>";
+		};
+		B5E0E4392CE490580013EB10 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
 				B5171CAB2CE337F400563C6B /* DetailModulePresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		B5E0E43A2CE490610013EB10 /* View */ = {
+			isa = PBXGroup;
+			children = (
 				B5171CAD2CE33DB800563C6B /* DetailModuleViewController.swift */,
 				B5171CAF2CE3421300563C6B /* DetailModuleView.swift */,
 				B5171CB72CE3810200563C6B /* DetailModuleHeaderView.swift */,
 			);
-			path = DetailModule;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
