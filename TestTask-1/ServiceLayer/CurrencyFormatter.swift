@@ -16,13 +16,13 @@ final class CurrencyFormatter: CurrencyFormatterProtocol {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = "."
+        formatter.locale = Locale(identifier: "en_US")
         return formatter
     }()
     
     func format(amount: Double, currencyCode: String) -> String {
         numberFormatter.currencyCode = currencyCode
-        numberFormatter.decimalSeparator = "."
-        numberFormatter.locale = Locale(identifier: "en_US")
         
         return numberFormatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
     }

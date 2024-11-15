@@ -11,6 +11,11 @@ protocol DataProviderProtocol {
     func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> ())
 }
 
+struct PlistNames {
+    static let rates = "rates"
+    static let transactions = "transactions"
+}
+
 final class DataProvider: DataProviderProtocol {
     private let dataService: DataServiceProtocol
     private let converter: CurrencyConverterProtocol
@@ -32,7 +37,7 @@ final class DataProvider: DataProviderProtocol {
         var loadError: Error?
         
         dispatchGroup.enter()
-        dataService.loadPlist(named: .transactions) { (result: Result<[TransactionDataModel], Error>) in
+        dataService.loadPlist(named: PlistNames.transactions) { (result: Result<[TransactionDataModel], Error>) in
             defer { dispatchGroup.leave() }
             switch result {
             case .success(let transactions):
@@ -43,7 +48,7 @@ final class DataProvider: DataProviderProtocol {
         }
         
         dispatchGroup.enter()
-        dataService.loadPlist(named: .rates) { (result: Result<[CurrencyRateDataModel], Error>) in
+        dataService.loadPlist(named: PlistNames.rates) { (result: Result<[CurrencyRateDataModel], Error>) in
             defer { dispatchGroup.leave() }
             switch result {
             case .success(let rates):
@@ -53,7 +58,7 @@ final class DataProvider: DataProviderProtocol {
             }
         }
         
-        dispatchGroup.notify(queue: .main) { [weak self] in
+        dispatchGroup.notify(queue: .global()) { [weak self] in
             guard let self else { return }
             
             if let error = loadError {
@@ -63,7 +68,6 @@ final class DataProvider: DataProviderProtocol {
             
             let rates = self.transformRates(rawRates: rawRates)
             let groupsOfTransactions = self.transformTransactions(rawTransactions: rawTransactions, rates: rates)
-            
             completion(.success(groupsOfTransactions))
         }
     }
@@ -89,7 +93,7 @@ final class DataProvider: DataProviderProtocol {
             
             let formattedBaseAmount = formatter.format(amount: amount, currencyCode: baseCurrency)
             
-            let formattedTargetAmount = formatter.format(amount: amount, currencyCode: targetCurrency)
+            let formattedTargetAmount = formatter.format(amount: convertedTargetAmount, currencyCode: targetCurrency)
             let transaction = Transaction(amount: amount, currency: baseCurrency, amountInTargetCurrency: convertedTargetAmount, formattedAmount: formattedBaseAmount, formattedAmountInTargetCurrency: formattedTargetAmount)
             
             transactionsDict[rawTransaction.sku, default: []].append(transaction)

@@ -108,7 +108,7 @@ extension MainModuleView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let transactions = transactions, let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ReusableTableViewCell.self)) as? ReusableTableViewCell else {
+        guard let transactions, let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ReusableTableViewCell.self)) as? ReusableTableViewCell else {
             return UITableViewCell()
         }
         

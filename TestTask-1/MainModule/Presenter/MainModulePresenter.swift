@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MainModulePresenterProtocol: AnyObject {
+protocol MainModulePresenterProtocol {
     func viewDidLoad()
     func tapOnTheGroup(index: Int)
     var title: String { get }
@@ -28,7 +28,7 @@ final class MainModulePresenter: MainModulePresenterProtocol {
     private var dataProvider: DataProviderProtocol
     private var router: MainModuleRouterProtocol
     
-    private var transactions: [GroupOfTransactions]!
+    private var transactions: [GroupOfTransactions]?
     let title = "Products"
     
     init(dataProvider: DataProviderProtocol, router: MainModuleRouterProtocol) {
@@ -40,25 +40,27 @@ final class MainModulePresenter: MainModulePresenterProtocol {
         view?.startSpinner()
         dataProvider.getPreparedTransactions { [weak self] result in
             guard let self else { return }
-            self.view?.stopSpinner()
             
-            switch result {
-            case .success(let transactions):
-                guard !transactions.isEmpty else {
-                    print("Presenter success")
-                    view?.showEmpty()
-                    return
+            DispatchQueue.main.async {
+                self.view?.stopSpinner()
+                
+                switch result {
+                case .success(let transactions):
+                    guard !transactions.isEmpty else {
+                        self.view?.showEmpty()
+                        return
+                    }
+                    self.transactions = transactions
+                    self.view?.displayTransactions(transactions)
+                case .failure(let error):
+                    self.view?.showError(error)
                 }
-                self.transactions = transactions
-                self.view?.displayTransactions(transactions)
-            case .failure(let error):
-                print("Presenter fail")
-                self.view?.showError(error)
             }
         }
     }
     
     func tapOnTheGroup(index: Int) {
+        guard let transactions else { return }
         let group = transactions[index]
         router.openDetailModule(with: group)
     }
@@ -66,5 +68,4 @@ final class MainModulePresenter: MainModulePresenterProtocol {
     func retryLoadingData() {
         viewDidLoad()
     }
-
 }

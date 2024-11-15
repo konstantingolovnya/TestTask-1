@@ -11,7 +11,7 @@ final class DetailModuleView: UIView {
     private let presenter: DetailModulePresenterProtocol
     private let headerView = DetailModuleHeaderView()
     
-    private var group: GroupOfTransactions!
+    private var group: GroupOfTransactions?
     
     private lazy var emptyDataLabel: UILabel = {
         let label = UILabel()
@@ -58,11 +58,11 @@ final class DetailModuleView: UIView {
 
 extension DetailModuleView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return group.transactions.count
+        return group?.transactions.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ReusableTableViewCell.self)) as? ReusableTableViewCell else {
+        guard let group, let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ReusableTableViewCell.self)) as? ReusableTableViewCell else {
             return UITableViewCell()
         }
         

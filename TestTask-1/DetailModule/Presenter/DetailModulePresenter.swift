@@ -30,8 +30,9 @@ final class DetailModulePresenter: DetailModulePresenterProtocol {
     }
     
     func viewDidLoad() {
-        if group.transactions.isEmpty {
+        guard !group.transactions.isEmpty else {
             view?.showEmpty()
+            return
         }
         
         view?.displayTransactions(group)
