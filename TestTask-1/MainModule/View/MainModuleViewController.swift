@@ -25,16 +25,15 @@ final class MainModuleViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        startSpinner()
         title = presenter.title
         view.backgroundColor = UIColor.systemGray6
         navigationController?.navigationBar.prefersLargeTitles = false
-        presenter.loadProducts()
+        presenter.viewDidLoad()
     }
 }
 
 extension MainModuleViewController: MainViewProtocol {
-    func displayTransactions(_ transactions: [Transaction]) {
+    func displayTransactions(_ transactions: [GroupOfTransactions]) {
         mainModuleView.update(transactions: transactions)
     }
     
@@ -48,5 +47,10 @@ extension MainModuleViewController: MainViewProtocol {
     
     func showError(_ error: Error) {
         mainModuleView.showError(error)
+    }
+    
+    func showEmpty() {
+        print("showEmpty VC")
+        mainModuleView.showEmpty()
     }
 }

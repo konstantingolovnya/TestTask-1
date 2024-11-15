@@ -11,22 +11,21 @@ final class DetailModuleView: UIView {
     private let presenter: DetailModulePresenterProtocol
     private let headerView = DetailModuleHeaderView()
     
-    private var model: Model!
+    private var group: GroupOfTransactions!
     
-    struct Model {
-        let total: String
-        let transactions: [FormattedTransaction]
-        
-        struct FormattedTransaction {
-            let amountInOriginalCurrency: String
-            let amountInTargetCurrency: String
-        }
-    }
+    private lazy var emptyDataLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Data not found"
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.isHidden = true
+        return label
+    }()
     
     private lazy var tableView: UITableView = {
         let view = UITableView()
         view.register(ReusableTableViewCell.self, forCellReuseIdentifier: String(describing: ReusableTableViewCell.self))
-        view.headerView(forSection: 0)?.tintColor = UIColor.black
         view.backgroundColor = .systemBackground
         view.separatorStyle = .singleLine
         view.rowHeight = UITableView.automaticDimension
@@ -46,16 +45,20 @@ final class DetailModuleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(model: DetailModuleView.Model) {
-        self.model = model
-        headerView.updateTotal(self.model.total)
+    func update(group: GroupOfTransactions) {
+        self.group = group
+        headerView.updateTotal(group.formattedAmount)
         tableView.reloadData()
+    }
+    
+    func showEmpty() {
+        emptyDataLabel.isHidden = false
     }
 }
 
 extension DetailModuleView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return model.transactions.count
+        return group.transactions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -63,8 +66,8 @@ extension DetailModuleView: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let transaction = model.transactions[indexPath.row]
-        cell.update(titleText: transaction.amountInOriginalCurrency, count: transaction.amountInTargetCurrency)
+        let transaction = group.transactions[indexPath.row]
+        cell.configure(titleText: transaction.formattedAmount, count: transaction.formattedAmountInTargetCurrency, showsDisclosureIndicator: false)
         return cell
     }
 }
@@ -79,22 +82,27 @@ private extension DetailModuleView {
     func setupSubviews() {
         addSubview(headerView)
         addSubview(tableView)
+        addSubview(emptyDataLabel)
     }
     
     func setupConstraints() {
         headerView.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        emptyDataLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-                    headerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-                    headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                    headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-                    tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-                    tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                    tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                    tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-                ])
+            headerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+            emptyDataLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            emptyDataLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 }
 

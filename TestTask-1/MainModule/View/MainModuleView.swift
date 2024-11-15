@@ -8,8 +8,34 @@
 import UIKit
 
 final class MainModuleView: UIView {
-    private var transactions: [Transaction]?
+    private var transactions: [GroupOfTransactions]?
     private let presenter: MainModulePresenterProtocol
+    
+    private lazy var emptyDataLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Data not found"
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.isHidden = true
+        return label
+    }()
+    
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .label
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var retryButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Try again", for: .normal)
+        button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var tableView: UITableView = {
         let view = UITableView()
@@ -30,6 +56,14 @@ final class MainModuleView: UIView {
         return view
     }()
     
+    private lazy var errorStack: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.distribution = .equalCentering
+        view.isHidden = true
+        return view
+    }()
+    
     init(presenter: MainModulePresenterProtocol) {
         self.presenter = presenter
         super.init(frame: .zero)
@@ -40,7 +74,7 @@ final class MainModuleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(transactions: [Transaction]) {
+    func update(transactions: [GroupOfTransactions]) {
         self.transactions = transactions
         tableView.reloadData()
     }
@@ -53,8 +87,18 @@ final class MainModuleView: UIView {
         spinner.stopAnimating()
     }
     
+    func showEmpty() {
+        emptyDataLabel.isHidden = false
+    }
+    
     func showError(_ error: Error) {
-        print(error)
+        errorLabel.text = "Error loading products, please try again"
+        errorStack.isHidden = false
+    }
+    
+    @objc private func retryButtonTapped() {
+        presenter.retryLoadingData()
+        errorStack.isHidden = true
     }
 }
 
@@ -69,7 +113,7 @@ extension MainModuleView: UITableViewDataSource {
         }
         
         let transaction = transactions[indexPath.row]
-        cell.update(titleText: transaction.sku, count: "\(transaction.transactions.count) transactions")
+        cell.configure(titleText: transaction.sku, count: "\(transaction.transactions.count) transactions", showsDisclosureIndicator: true)
         return cell
     }
 }
@@ -77,7 +121,7 @@ extension MainModuleView: UITableViewDataSource {
 extension MainModuleView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter.tapOnTheTransaction(index: indexPath.row)
+        presenter.tapOnTheGroup(index: indexPath.row)
     }
 }
 
@@ -91,20 +135,32 @@ private extension MainModuleView {
     func setupSubviews() {
         addSubview(tableView)
         addSubview(spinner)
+        addSubview(emptyDataLabel)
+        errorStack.addArrangedSubview(errorLabel)
+        errorStack.addArrangedSubview(retryButton)
+        addSubview(errorStack)
     }
     
     func setupConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         spinner.translatesAutoresizingMaskIntoConstraints = false
+        emptyDataLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorStack.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor), //20
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor), // -20
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-            spinner.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor)
+            spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            emptyDataLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            emptyDataLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            errorStack.centerXAnchor.constraint(equalTo: centerXAnchor),
+            errorStack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

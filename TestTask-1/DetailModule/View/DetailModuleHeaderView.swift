@@ -39,7 +39,7 @@ private extension DetailModuleHeaderView {
         setupConstrains()
     }
     
-    private func setupConstrains() {
+    func setupConstrains() {
         totalLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([

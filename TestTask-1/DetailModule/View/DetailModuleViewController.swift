@@ -29,12 +29,16 @@ final class DetailModuleViewController: UIViewController {
         super.viewDidLoad()
         title = presenter.title
         view.backgroundColor = UIColor.systemGray6
-        presenter.prepareTransactions()
+        presenter.viewDidLoad()
     }
 }
 
 extension DetailModuleViewController: DetailModuleViewProtocol {
-    func displayTransactions(_ model: DetailModuleView.Model) {
-        detailView.update(model: model)
+    func displayTransactions(_ group: GroupOfTransactions) {
+        detailView.update(group: group)
+    }
+    
+    func showEmpty() {
+        detailView.showEmpty()
     }
 }

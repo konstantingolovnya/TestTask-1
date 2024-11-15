@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol MainModuleRouterProtocol {
-    func openDetailModule(with transaction: Transaction, rates: [CurrencyRate])
+    func openDetailModule(with transaction: GroupOfTransactions)
     func setRootViewController(root: UIViewController)
 }
 
@@ -25,8 +25,8 @@ final class MainModuleRouter: MainModuleRouterProtocol {
         self.root = root
     }
     
-    func openDetailModule(with transaction: Transaction, rates: [CurrencyRate]) {
-        let viewController = detailModuleFactory.makeDetailModuleViewController(transaction: transaction, rates: rates)
+    func openDetailModule(with transaction: GroupOfTransactions) {
+        let viewController = detailModuleFactory.makeDetailModuleViewController(transaction: transaction)
         
         root?.navigationController?.pushViewController(viewController, animated: true)
     }

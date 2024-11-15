@@ -12,7 +12,7 @@ final class ReusableTableViewCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.textColor = .black
+        label.textColor = .label
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         return label
     }()
@@ -47,9 +47,10 @@ final class ReusableTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(titleText: String, count: String) {
+    func configure(titleText: String, count: String, showsDisclosureIndicator: Bool) {
         titleLabel.text = titleText
         bodyLabel.text = count
+        accessoryType = showsDisclosureIndicator ? .disclosureIndicator : .none
     }
 }
 

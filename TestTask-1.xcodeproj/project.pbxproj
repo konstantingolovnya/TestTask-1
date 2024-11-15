@@ -19,7 +19,7 @@
 		B5171C8A2CE21A6B00563C6B /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C892CE21A6B00563C6B /* DataProvider.swift */; };
 		B5171C8C2CE21A8900563C6B /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C8B2CE21A8900563C6B /* CurrencyConverter.swift */; };
 		B5171C902CE21ADC00563C6B /* TransactionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C8F2CE21ADC00563C6B /* TransactionDataModel.swift */; };
-		B5171C922CE21AF900563C6B /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C912CE21AF900563C6B /* Transaction.swift */; };
+		B5171C922CE21AF900563C6B /* GroupOfTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C912CE21AF900563C6B /* GroupOfTransactions.swift */; };
 		B5171C942CE21B1600563C6B /* CurrencyRateDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C932CE21B1600563C6B /* CurrencyRateDataModel.swift */; };
 		B5171C962CE21B2800563C6B /* CurrencyRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C952CE21B2800563C6B /* CurrencyRate.swift */; };
 		B5171C992CE21B6500563C6B /* MainModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5171C982CE21B6500563C6B /* MainModuleViewController.swift */; };
@@ -72,7 +72,7 @@
 		B5171C892CE21A6B00563C6B /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		B5171C8B2CE21A8900563C6B /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
 		B5171C8F2CE21ADC00563C6B /* TransactionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDataModel.swift; sourceTree = "<group>"; };
-		B5171C912CE21AF900563C6B /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		B5171C912CE21AF900563C6B /* GroupOfTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOfTransactions.swift; sourceTree = "<group>"; };
 		B5171C932CE21B1600563C6B /* CurrencyRateDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyRateDataModel.swift; sourceTree = "<group>"; };
 		B5171C952CE21B2800563C6B /* CurrencyRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyRate.swift; sourceTree = "<group>"; };
 		B5171C982CE21B6500563C6B /* MainModuleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModuleViewController.swift; sourceTree = "<group>"; };
@@ -140,7 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				B5171C542CE2178D00563C6B /* AppDelegate.swift */,
-				B5171CA32CE2282300563C6B /* First data set */,
+				B5171CA32CE2282300563C6B /* FirstDataSet */,
 				B5171C562CE2178D00563C6B /* SceneDelegate.swift */,
 				B5171C882CE21A4B00563C6B /* ServiceLayer */,
 				B5171C8D2CE21AAF00563C6B /* MainModule */,
@@ -197,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				B5171C8F2CE21ADC00563C6B /* TransactionDataModel.swift */,
-				B5171C912CE21AF900563C6B /* Transaction.swift */,
+				B5171C912CE21AF900563C6B /* GroupOfTransactions.swift */,
 				B5171C932CE21B1600563C6B /* CurrencyRateDataModel.swift */,
 				B5171C952CE21B2800563C6B /* CurrencyRate.swift */,
 			);
@@ -222,13 +222,13 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
-		B5171CA32CE2282300563C6B /* First data set */ = {
+		B5171CA32CE2282300563C6B /* FirstDataSet */ = {
 			isa = PBXGroup;
 			children = (
 				B5171CA12CE2282300563C6B /* rates.plist */,
 				B5171CA22CE2282300563C6B /* transactions.plist */,
 			);
-			path = "First data set";
+			path = FirstDataSet;
 			sourceTree = "<group>";
 		};
 		B5171CA82CE3330400563C6B /* DetailModule */ = {
@@ -411,7 +411,7 @@
 				B5171CB02CE3421300563C6B /* DetailModuleView.swift in Sources */,
 				B5171C9D2CE21BAB00563C6B /* ReusableTableViewCell.swift in Sources */,
 				B5171CA72CE32E0800563C6B /* MainModuleRouter.swift in Sources */,
-				B5171C922CE21AF900563C6B /* Transaction.swift in Sources */,
+				B5171C922CE21AF900563C6B /* GroupOfTransactions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

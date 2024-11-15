@@ -16,14 +16,16 @@ final class MainModuleFactory: MainModuleFactoryProtocol {
     
     func makeMainModileViewController() -> MainModuleViewController {
         let dataService = DataService()
-        let dataProvider =  DataProvider()
+        let converter = CurrencyConverter()
+        let formatter = CurrencyFormatter()
+        let dataProvider = DataProvider(dataService: dataService, converter: converter, formatter: formatter)
         
         let router: MainModuleRouterProtocol = {
             let router = MainModuleRouter(detailModuleFactory: DetailModuleFactory())
             return router
         }()
         
-        let presenter = MainModulePresenter(dataService: dataService, dataProvider: dataProvider, router: router)
+        let presenter = MainModulePresenter(dataProvider: dataProvider, router: router)
         let mainModuleVC = MainModuleViewController(presenter: presenter)
         presenter.view = mainModuleVC
         router.setRootViewController(root: mainModuleVC)

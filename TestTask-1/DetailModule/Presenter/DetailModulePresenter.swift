@@ -8,64 +8,32 @@
 import Foundation
 
 protocol DetailModulePresenterProtocol {
-    func prepareTransactions()
-    var transaction: Transaction { get }
+    func viewDidLoad()
+    var group: GroupOfTransactions { get }
     var title: String { get }
 }
 
 protocol DetailModuleViewProtocol: AnyObject {
-    func displayTransactions(_ model: DetailModuleView.Model)
+    func displayTransactions(_ group: GroupOfTransactions)
+    func showEmpty()
 }
 
 final class DetailModulePresenter: DetailModulePresenterProtocol {
     weak var view: DetailModuleViewProtocol?
-    let transaction: Transaction
+    
+    let group: GroupOfTransactions
     let title: String
-    let converter: CurrencyConverterProtocol
-    let formatter: CurrencyFormatterProtocol
-    let targetCurrency: String
-    
-    typealias TemporaryTransaction = (originalCurrency: String, originalAmount: Double, targetCurrency: String, targetAmount: Double)
-    
-    init(transaction: Transaction, converter: CurrencyConverterProtocol, formatter: CurrencyFormatterProtocol, targetCurrency: String = "GBP") {
-        self.transaction = transaction
-        self.title = "Transactions for \(transaction.sku)"
-        self.converter = converter
-        self.formatter = formatter
-        self.targetCurrency = targetCurrency.uppercased()
-    }
-    
-    func prepareTransactions() {
-        let convertedTransactions = convertTransactionsAmount()
-        let formattedTransactions = formatTransactions(convertedTransactions)
         
-        let totalAmount = convertedTransactions.reduce(0) { $0 + $1.targetAmount }
-        let formattedTotalAmount = formatter.format(amount: totalAmount, currencyCode: targetCurrency.uppercased())
-    
-        view?.displayTransactions(DetailModuleView.Model(total: formattedTotalAmount, transactions: formattedTransactions))
+    init(transaction: GroupOfTransactions) {
+        self.group = transaction
+        self.title = "Transactions for \(transaction.sku)"
     }
     
-    private func convertTransactionsAmount() -> [TemporaryTransaction] {
-        let convertedTransactions = transaction.transactions.compactMap { detail in
-            
-            if let targetAmount = converter.convert(amount: detail.amount, fromCurrency: detail.currency, toCurrency: targetCurrency) {
-                
-                let convertedTransaction = (detail.currency, detail.amount, targetCurrency.uppercased(), targetAmount)
-                return convertedTransaction
-            }
-            return nil
+    func viewDidLoad() {
+        if group.transactions.isEmpty {
+            view?.showEmpty()
         }
-        return convertedTransactions
-    }
-    
-    private func formatTransactions(_ transactions: [TemporaryTransaction]) -> [DetailModuleView.Model.FormattedTransaction] {
-        let formattedTransactions = transactions.map { transaction in
-            let formatedOriginalAmount = formatter.format(amount: transaction.originalAmount, currencyCode: transaction.originalCurrency)
-            let formatedTargetAmount = formatter.format(amount: transaction.targetAmount, currencyCode: transaction.targetCurrency)
-            
-            let formattedTransaction = DetailModuleView.Model.FormattedTransaction(amountInOriginalCurrency: formatedOriginalAmount, amountInTargetCurrency: formatedTargetAmount)
-            return formattedTransaction
-        }
-        return formattedTransactions
+        
+        view?.displayTransactions(group)
     }
 }
