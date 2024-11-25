@@ -11,7 +11,7 @@ protocol DataProviderProtocol {
     func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> ())
 }
 
-struct PlistNames {
+enum PlistNames {
     static let rates = "rates"
     static let transactions = "transactions"
 }
