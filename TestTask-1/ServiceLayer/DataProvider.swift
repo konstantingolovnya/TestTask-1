@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DataProviderProtocol {
-    func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> ())
+    func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> Void)
 }
 
 enum PlistNames {
@@ -29,7 +29,7 @@ final class DataProvider: DataProviderProtocol {
         self.targetCurrency = targetCurrency.uppercased()
     }
     
-    func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> ()) {
+    func getPreparedTransactions(completion: @escaping (Result<[GroupOfTransactions], Error>) -> Void) {
         let dispatchGroup = DispatchGroup()
         
         var rawTransactions: [TransactionDataModel] = []
@@ -66,8 +66,8 @@ final class DataProvider: DataProviderProtocol {
                 return
             }
             
-            let rates = self.transformRates(rawRates: rawRates)
-            let groupsOfTransactions = self.transformTransactions(rawTransactions: rawTransactions, rates: rates)
+            let rates = transformRates(rawRates: rawRates)
+            let groupsOfTransactions = transformTransactions(rawTransactions: rawTransactions, rates: rates)
             completion(.success(groupsOfTransactions))
         }
     }
@@ -89,7 +89,7 @@ final class DataProvider: DataProviderProtocol {
             let baseCurrency = rawTransaction.currency.uppercased()
             let targetCurrency = targetCurrency.uppercased()
             
-            guard let amount = Double(rawTransaction.amount), let convertedTargetAmount = converter.convert(amount: amount, fromCurrency: baseCurrency, toCurrency: targetCurrency, rates: rates) else { return } // { continue }
+            guard let amount = Double(rawTransaction.amount), let convertedTargetAmount = converter.convert(amount: amount, fromCurrency: baseCurrency, toCurrency: targetCurrency, rates: rates) else { return }
             
             let formattedBaseAmount = formatter.format(amount: amount, currencyCode: baseCurrency)
             

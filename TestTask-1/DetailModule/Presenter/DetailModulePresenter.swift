@@ -8,9 +8,10 @@
 import Foundation
 
 protocol DetailModulePresenterProtocol {
-    func viewDidLoad()
     var group: GroupOfTransactions { get }
     var title: String { get }
+    
+    func viewDidLoad()
 }
 
 protocol DetailModuleViewProtocol: AnyObject {

@@ -10,7 +10,6 @@ import UIKit
 
 protocol MainModuleRouterProtocol {
     func openDetailModule(with transaction: GroupOfTransactions)
-    func setRootViewController(root: UIViewController)
 }
 
 final class MainModuleRouter: MainModuleRouterProtocol {

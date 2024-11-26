@@ -8,9 +8,10 @@
 import Foundation
 
 protocol MainModulePresenterProtocol {
+    var title: String { get }
+    
     func viewDidLoad()
     func tapOnTheGroup(index: Int)
-    var title: String { get }
     func retryLoadingData()
 }
 

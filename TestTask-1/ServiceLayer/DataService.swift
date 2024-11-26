@@ -8,13 +8,25 @@
 import Foundation
 
 protocol DataServiceProtocol {
-    func loadPlist<T: Decodable>(named name: String, completion: @escaping (Result<[T], Error>) -> ())
+    func loadPlist<T: Decodable>(named name: String, completion: @escaping (Result<[T], Error>) -> Void)
+}
+
+enum DataServiceError: Error {
+    case fileNotFound(name: String)
 }
 
 final class DataService: DataServiceProtocol {
     
-    func loadPlist<T: Decodable>(named name: String, completion: @escaping (Result<[T], Error>) -> ()) {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "plist") else { return }
+    func loadPlist<T: Decodable>(named name: String, completion: @escaping (Result<[T], Error>) -> Void) {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "plist") else {
+            let error = NSError(
+                domain: "TestTask-1.DataService", 
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Plist file '\(name)' not found"]
+            )
+            completion(.failure(error))
+            return
+        }
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
             do {

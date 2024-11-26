@@ -13,6 +13,7 @@ final class CurrencyConverterTests: XCTestCase {
     private var currencyConverter: CurrencyConverter!
     
     override func setUpWithError() throws {
+        currencyConverter = .init()
     }
     
     override func tearDownWithError() throws {
@@ -21,9 +22,7 @@ final class CurrencyConverterTests: XCTestCase {
     
     func testDirectConversion() throws {
         let rates = [CurrencyRate(from: "USD", to: "GBP", rate: 2)]
-        
-        currencyConverter = CurrencyConverter()
-        
+                
         let result = try XCTUnwrap(currencyConverter.convert(amount: 100, fromCurrency: "USD", toCurrency: "GBP", rates: rates))
         XCTAssertEqual(result, 200)
     }
@@ -33,9 +32,7 @@ final class CurrencyConverterTests: XCTestCase {
             CurrencyRate(from: "USD", to: "GBP", rate: 2),
             CurrencyRate(from: "GBP", to: "JPY", rate: 3)
         ]
-        
-        currencyConverter = CurrencyConverter()
-        
+                
         let result = try XCTUnwrap(currencyConverter.convert(amount: 100, fromCurrency: "USD", toCurrency: "JPY", rates: rates))
         XCTAssertEqual(result, 600)
     }
@@ -58,8 +55,6 @@ final class CurrencyConverterTests: XCTestCase {
             CurrencyRate(from: "GBP", to: "JPY", rate: 3)
         ]
         
-        currencyConverter = CurrencyConverter()
-
         let result = currencyConverter.convert(amount: 100, fromCurrency: "USD", toCurrency: "BTC", rates: rates)
         XCTAssertNil(result)
     }
@@ -71,8 +66,6 @@ final class CurrencyConverterTests: XCTestCase {
             CurrencyRate(from: "JPY", to: "EUR", rate: 4)
         ]
         
-        currencyConverter = CurrencyConverter()
-
         let result = try XCTUnwrap(currencyConverter.convert(amount: 100, fromCurrency: "USD", toCurrency: "EUR", rates: rates))
         XCTAssertEqual(result, 2400)
     }

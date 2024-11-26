@@ -20,11 +20,7 @@ final class MainModuleFactory: MainModuleFactoryProtocol {
         let formatter = CurrencyFormatter()
         let dataProvider = DataProvider(dataService: dataService, converter: converter, formatter: formatter)
         
-        let router: MainModuleRouterProtocol = {
-            let router = MainModuleRouter(detailModuleFactory: DetailModuleFactory())
-            return router
-        }()
-        
+        let router = MainModuleRouter(detailModuleFactory: DetailModuleFactory())
         let presenter = MainModulePresenter(dataProvider: dataProvider, router: router)
         let mainModuleVC = MainModuleViewController(presenter: presenter)
         presenter.view = mainModuleVC
